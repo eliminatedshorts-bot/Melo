@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melo MC | Official Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;600&display=swap');
+        
+        :root {
+            --melo-blue: #00d2ff;
+            --melo-orange: #ff9d00;
+            --melo-red: #ff2a2a;
+        }
+
+        body { 
+            background-color: #05070a; color: #e2e8f0; font-family: 'Poppins', sans-serif;
+            background-image: radial-gradient(circle at top right, rgba(0, 210, 255, 0.08), transparent),
+                              radial-gradient(circle at bottom left, rgba(255, 42, 42, 0.08), transparent);
+        }
+
+        .heading-font { font-family: 'Orbitron', sans-serif; }
+
+        .melo-card {
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .melo-card:hover {
+            border-color: var(--melo-blue); transform: translateY(-8px);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+        }
+
+        .btn-melo {
+            background: linear-gradient(90deg, var(--melo-blue), var(--melo-orange), var(--melo-red));
+            background-size: 200% auto; transition: 0.5s;
+        }
+        .btn-melo:hover { background-position: right center; transform: scale(1.05); }
+
+        .admin-input { @apply w-full bg-slate-900 border border-slate-700 p-2 rounded mb-3 text-sm text-white focus:border-orange-500 outline-none; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <nav class="flex justify-between items-center p-6 sticky top-0 z-50 bg-[#05070a]/90 backdrop-blur-md border-b border-white/5">
+        <div class="flex items-center gap-3">
+            <span class="heading-font text-2xl font-black tracking-tighter italic">MELO<span class="text-red-500">MC</span></span>
+        </div>
+        <button onclick="openLogin()" class="text-xs font-bold text-orange-400 hover:text-white transition uppercase tracking-widest">Staff Panel</button>
+    </nav>
+
+    <header class="py-20 text-center px-4">
+        <h1 id="hero-title" class="heading-font text-5xl md:text-7xl font-black mb-4 uppercase italic">MELO MC</h1>
+        <p id="hero-desc" class="text-slate-400 max-w-2xl mx-auto mb-10">Nepal's Premier Minecraft Experience</p>
+    </header>
+
+    <main id="shop-container" class="max-w-7xl mx-auto px-6 space-y-20">
+        </main>
+
+    <div id="user-modal" class="hidden fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="melo-card p-10 max-w-sm w-full text-center">
+            <h3 class="heading-font text-xl mb-6">IDENTIFY YOURSELF</h3>
+            <input type="text" id="mc-username" placeholder="Enter Minecraft Name" class="admin-input text-center text-lg py-4 border-blue-500">
+            <button onclick="proceedToPayment()" class="btn-melo w-full py-4 rounded-xl font-bold">CONTINUE TO CHECKOUT</button>
+        </div>
+    </div>
+
+    <div id="pay-modal" class="hidden fixed inset-0 z-[300] bg-black/98 flex items-center justify-center p-4">
+        <div class="melo-card p-8 max-w-md w-full text-center border-orange-500/50">
+            <h3 class="heading-font text-2xl text-orange-400 mb-2">PAYMENT INSTRUCTIONS</h3>
+            <p id="pay-details" class="text-sm text-slate-400 mb-6"></p>
+            
+            <img src="https://i.imgur.com/your-esewa-qr.png" id="display-qr" class="w-64 h-64 mx-auto bg-white p-2 rounded-2xl mb-6 shadow-2xl">
+            
+            <div class="bg-red-500/10 border border-red-500/20 p-4 rounded-xl text-left mb-6">
+                <p class="text-xs font-bold text-red-500 uppercase mb-1 italic">Important Remark:</p>
+                <p class="text-sm text-white italic">"Please write <span id="remark-text" class="font-bold text-orange-400"></span> in the remark or open a ticket on Discord."</p>
+            </div>
+            
+            <button onclick="closeModals()" class="w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-slate-200">I HAVE PAID</button>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="hidden fixed inset-0 z-[500] bg-slate-950 overflow-y-auto p-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="heading-font text-3xl text-blue-400">MELO ADMIN V3</h2>
+                <button onclick="saveAndExit()" class="bg-green-600 px-10 py-3 rounded-xl font-bold shadow-lg shadow-green-900/40">APPLY CHANGES</button>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-10">
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-white/5">
+                    <h3 class="font-bold text-orange-400 mb-4 uppercase italic">Add New Category</h3>
+                    <div class="flex gap-2 mb-8">
+                        <input type="text" id="new-cat-input" class="admin-input mb-0" placeholder="Category Name (e.g. Bundles)">
+                        <button onclick="createCategory()" class="bg-blue-600 px-4 rounded font-bold hover:bg-blue-500">+</button>
+                    </div>
+                    <div id="admin-cats" class="space-y-4"></div>
+                </div>
+
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-white/5">
+                    <h3 class="font-bold text-red-400 mb-4 uppercase italic">Site Setup</h3>
+                    <label class="text-[10px] text-slate-500 uppercase">Main Title</label>
+                    <input type="text" id="edit-main-title" class="admin-input">
+                    <label class="text-[10px] text-slate-500 uppercase">Subtext</label>
+                    <textarea id="edit-main-desc" class="admin-input h-24"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let store = {
+            title: "MELO MC",
+            desc: "Nepal's Premier Minecraft Experience",
+            categories: [
+                {
+                    name: "Premium Ranks",
+                    items: [
+                        { name: "Yoddha", price: 500, img: "png/rank1.png" },
+                        { name: "Gorkhali", price: 1200, img: "png/rank2.png" },
+                        { name: "Maharaja", price: 2500, img: "png/rank3.png" },
+                        { name: "Devta", price: 5000, img: "png/rank4.png" }
+                    ]
+                },
+                {
+                    name: "Crate Keys",
+                    items: [
+                        { name: "Op", price: 100, img: "png/crate1.png" },
+                        { name: "Mega", price: 250, img: "png/crate2.png" },
+                        { name: "Light", price: 400, img: "png/crate3.png" },
+                        { name: "Party", price: 600, img: "png/crate4.png" },
+                        { name: "Vote", price: 0, img: "png/crate5.png" }
+                    ]
+                }
+            ]
+        };
+
+        let currentSelection = null;
+
+        function render() {
+            document.getElementById('hero-title').innerText = store.title;
+            document.getElementById('hero-desc').innerText = store.desc;
+            
+            const container = document.getElementById('shop-container');
+            container.innerHTML = store.categories.map((cat, cIdx) => `
+                <section>
+                    <h2 class="heading-font text-3xl mb-8 border-l-4 border-orange-500 pl-4 uppercase tracking-tighter">${cat.name}</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                        ${cat.items.map((item, iIdx) => `
+                            <div class="melo-card p-6 text-center">
+                                <img src="${item.img}" class="w-24 h-24 mx-auto mb-4 object-contain drop-shadow-lg" onerror="this.src='https://i.imgur.com/E8DE2FFF.jpeg'">
+                                <h4 class="font-bold text-lg mb-1">${item.name}</h4>
+                                <p class="text-blue-400 font-bold mb-6 italic">Rs. ${item.price}</p>
+                                <button onclick="startCheckout('${item.name}', ${item.price})" class="btn-melo w-full py-2 rounded-lg font-bold text-xs">PURCHASE</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `).join('');
+        }
+
+        // Checkout Logic
+        function startCheckout(name, price) {
+            currentSelection = { name, price };
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        function proceedToPayment() {
+            const user = document.getElementById('mc-username').value;
+            if(!user) return alert("Enter Minecraft Username!");
+            
+            document.getElementById('user-modal').classList.add('hidden');
+            document.getElementById('pay-details').innerText = `${currentSelection.name} for ${user}`;
+            document.getElementById('remark-text').innerText = `${currentSelection.name} | ${user} | Rs.${currentSelection.price}`;
+            document.getElementById('pay-modal').classList.remove('hidden');
+        }
+
+        // Admin Panel Functions
+        function openLogin() {
+            if(prompt("Staff Username:") === "Admin_303") {
+                document.getElementById('admin-panel').classList.remove('hidden');
+                loadAdminData();
+            }
+        }
+
+        function loadAdminData() {
+            document.getElementById('edit-main-title').value = store.title;
+            document.getElementById('edit-main-desc').value = store.desc;
+            
+            const catDiv = document.getElementById('admin-cats');
+            catDiv.innerHTML = store.categories.map((cat, cIdx) => `
+                <div class="bg-black/40 p-4 rounded-xl mb-4">
+                    <div class="flex justify-between mb-4">
+                        <input type="text" value="${cat.name}" onchange="store.categories[${cIdx}].name=this.value" class="bg-transparent font-bold text-blue-400 outline-none">
+                        <button onclick="removeCategory(${cIdx})" class="text-red-500 text-xs uppercase font-bold">Delete Category</button>
+                    </div>
+                    <div id="items-${cIdx}" class="space-y-2">
+                        ${cat.items.map((item, iIdx) => `
+                            <div class="grid grid-cols-3 gap-2">
+                                <input class="admin-input mb-0" value="${item.name}" onchange="store.categories[${cIdx}].items[${iIdx}].name=this.value" placeholder="Item Name">
+                                <input class="admin-input mb-0" value="${item.price}" onchange="store.categories[${cIdx}].items[${iIdx}].price=this.value" placeholder="Price">
+                                <input class="admin-input mb-0" value="${item.img}" onchange="store.categories[${cIdx}].items[${iIdx}].img=this.value" placeholder="png/image.png">
+                            </div>
+                        `).join('')}
+                        <button onclick="addItemToCat(${cIdx})" class="w-full py-1 text-[10px] bg-white/5 rounded mt-2">+ ADD ITEM</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function createCategory() {
+            const name = document.getElementById('new-cat-input').value;
+            if(!name) return;
+            store.categories.push({ name: name, items: [] });
+            document.getElementById('new-cat-input').value = "";
+            loadAdminData();
+        }
+
+        function removeCategory(idx) {
+            store.categories.splice(idx, 1);
+            loadAdminData();
+        }
+
+        function addItemToCat(idx) {
+            store.categories[idx].items.push({ name: "New Plan", price: 0, img: "png/image.png" });
+            loadAdminData();
+        }
+
+        function saveAndExit() {
+            store.title = document.getElementById('edit-main-title').value;
+            store.desc = document.getElementById('edit-main-desc').value;
+            document.getElementById('admin-panel').classList.add('hidden');
+            render();
+        }
+
+        function closeModals() {
+            document.querySelectorAll('#user-modal, #pay-modal').forEach(m => m.classList.add('hidden'));
+        }
+
+        render();
+    </script>
+</body>
+</html>
